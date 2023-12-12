@@ -8,10 +8,15 @@ input[type="checkbox"]:checked{
 }
 
 #logIn{
+
     opacity: 0;
     max-height: 0;
     overflow: hidden;
     transition: opacity 0.5s ease, max-height 0.5s ease;
+}
+
+#logIn *{
+  font-weight : bold;
 }
 
 .show {
@@ -35,3 +40,8 @@ body::-webkit-scrollbar-thumb{
   background: gray;
 
 }
+
+#joinNow{
+  background: linear-gradient(to right, #ff5858, #f857a6);
+}
+
