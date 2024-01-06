@@ -14,5 +14,7 @@ export class HomeComponent {
     //@ts-ignore
     document.getElementById("logInBd").style.display = "block";
   }
+
+  
      
 }
