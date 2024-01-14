@@ -1,38 +1,64 @@
-@import './base.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+
+@media (max-height: 400px) {
+  .fixed-container {
+    margin-top: 100px !important; 
   }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+
+input[type="checkbox"]:checked{
+  background-color : pink;
+}
+
+#logIn{
+
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease;
+}
+
+#logIn *{
+  font-weight : bold;
+}
+
+.show {
+  opacity: 1 !important;
+  max-height: 500px !important; /* Adjust the max-height as needed */
+}
+
+.hide {
+  opacity: 0 !important;
+  max-height: 0 !important;
+}
+
+body::-webkit-scrollbar-track{
+  background: inherit;
+
+}
+body::-webkit-scrollbar{
+  width: 7px;
+}
+body::-webkit-scrollbar-thumb{
+  background: gray;
+
+}
+
+#joinNow{
+  background: linear-gradient(to right, #ff5858, #f857a6);
+}
+
+.login-btn{
+  background :linear-gradient(to right, #ff5858, #f857a6);
+}
+
+.fixed-container{
+  text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
 }
