@@ -27,7 +27,7 @@
     <div class="flex justify-between">
         <div class="flex items-start">
             <div class="flex items-center h-5">
-                <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded " required>
+                <input id="remember" type="checkbox" value="" required="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-pink-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800">
             </div>
             <label for="remember" class="ml-2 text-md font-medium text-gray-900">Remember me</label>
         </div>
