@@ -1,4 +1,5 @@
 <template>
+    <Header />
    <div class="fixed top-0 w-screen h-screen flex items-center" style="background-image: url('src/assets/images/background.webp'); background-size: cover;">
     <div class="mx-auto my-auto fixed-container">
         <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold text-white text-center text-shadow-xl">Welcome to <span class="text-pink-400">L</span><span class="text-pink-300">ove</span><span class="text-pink-400">L</span><span class="text-pink-300">ink</span></h1>
@@ -11,13 +12,16 @@
 </template>
 
 <script>
+import Header from './Header.vue';
+
 export default{
-    methods:{
-        LogIn(){
+    methods: {
+        LogIn() {
             document.getElementById("logIn")?.classList.remove("hide");
             document.getElementById("logIn")?.classList.add("show");
             document.getElementById("logInBd").style.display = "block";
         }
-    }
+    },
+    components: { Header }
 }
 </script>
