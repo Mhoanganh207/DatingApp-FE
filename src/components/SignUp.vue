@@ -2,6 +2,7 @@
 import axios from 'axios';
 import Account from '../model/account.js';
 import { ref } from 'vue';
+import router from '@/router';
 
 const firstname = ref('');
 const surname = ref('');
@@ -12,9 +13,11 @@ const birthdate = ref('');
 
 function signUp(){
    const account = new Account(email.value,password.value,firstname.value,surname.value,gender.value,new Date(birthdate.value).toJSON(),'');
-   console.log(account);
    axios.post('http://localhost:5075/api/account',account).then(response => {
-       console.log(response);
+       router.push({
+              path: `/account/avatar/${response.data.id}/${gender.value}`,
+              
+       });
    }).catch(error => {
        console.log(error);
    });
