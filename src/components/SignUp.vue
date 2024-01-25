@@ -13,6 +13,7 @@ const birthdate = ref('');
 
 function signUp(){
    const account = new Account(email.value,password.value,firstname.value,surname.value,gender.value,new Date(birthdate.value).toJSON(),'');
+   console.log(account);
    axios.post('http://localhost:5075/api/account',account).then(response => {
        router.push({
               path: `/account/avatar/${response.data.id}/${gender.value}`,
