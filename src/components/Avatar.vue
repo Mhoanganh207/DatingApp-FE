@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
@@ -13,6 +13,11 @@ const load = ref(false);
 const interestedList = ['Sport', 'Music', 'Travel', 'Cooking', 'Reading', 'Movies', 'Dancing', 'Photography', 'Art', 'Fashion', 'Gaming', 'Yoga'];
 const list = [];
 onMounted(() => {
+    if (window.localStorage.getItem('token') !== null) {
+        router.push({
+            path: `/main`,
+        });
+    }
     id.value = route.params.id;
     if (route.params.gender === 'true') {
         avatar.value = 'src/assets/images/male.jpeg';
@@ -32,17 +37,15 @@ function handleImage(e) {
     document.getElementById("avatar").setAttribute("src", URL.createObjectURL(e.target.files[0]));
 }
 
-function addtoList(index,event) {
-    if(event.target.classList.contains("bg-pink-300")){
+function addtoList(index, event) {
+    if (event.target.classList.contains("bg-pink-300")) {
         event.target.classList.remove("bg-pink-300");
         event.target.classList.remove("text-white");
         event.target.classList.add("bg-white");
         list.splice(list.indexOf(interestedList[index]), 1);
-        console.log(list);
         return;
     }
     list.push(interestedList[index]);
-    console.log(list);
     event.target.classList.remove("bg-white");
     event.target.classList.add("bg-pink-300");
     event.target.classList.add("text-white");
@@ -91,7 +94,7 @@ function uploadAvatar() {
             <div class="flex flex-col w-80 items-center space-y-4 mt-44 md:mt-0 ">
                 <h2 class="text-2xl font-bold">Chose what you are interested in</h2>
                 <div class="interestedBox">
-                    <button @click="addtoList(index,$event)" v-for="(infor,index) in interestedList"
+                    <button @click="addtoList(index, $event)" v-for="(infor, index) in interestedList"
                         class="text-gray-900  bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-200 font-bold rounded-lg visited:bg-pink-400 text-sm px-4 py-2 m-1"
                         href="">{{ infor }}</button>
                 </div>
@@ -108,7 +111,7 @@ function uploadAvatar() {
                     <img id="avatar" class="w-80 h-80 object-cover" :src="getImage()" alt="avatar">
                 </div>
                 <div class="flex space-x-3">
-                    <input @change="handleImage" type="file" id="files" class="hidden" />
+                    <input @change="handleImage" type="file" accept="image/*" id="files" class="hidden" />
                     <label
                         class="h-12 cursor-pointer p-3 w-36 bg-pink-400 text-white font-bold rounded-xl text-center hover:bg-pink-500 duration-150"
                         for="files">Change avatar</label>
@@ -120,5 +123,6 @@ function uploadAvatar() {
 
                 </div>
             </div>
+        </div>
     </div>
-</div></template>
+</template>

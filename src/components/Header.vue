@@ -7,8 +7,8 @@
         <button v-if="props.signedIn !== '1'" @click="showLogin"
             class="login-btn duration-300  rounded-3xl px-6 py-1.5 text-lg text-white font-bold items-end shadow-md">Log
             In</button>
-        <img v-if="props.signedIn === '1'" @click="router.push('/account/profile')"
-            class="rounded-full cursor-pointer" :src='getAvatar()' width="45" height="45">    
+        <img v-if="props.signedIn === '1'" @click="router.push('/user')"
+            class="rounded-full cursor-pointer object-cover w-12 h-12" :src='getAvatar()'>
 
     </header>
     <div id="logIn" class="max-w-md p-8 mx-auto shadow-lg rounded-2xl mt-5 mb-5 z-20 relative bg-white">
@@ -75,7 +75,7 @@
 <script setup>
 
 import axios from 'axios';
-import { onMounted, ref, onBeforeMount} from 'vue';
+import { onMounted, ref, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 const unauthenticated = ref(false);
 const email = ref('');
@@ -83,26 +83,38 @@ const password = ref('');
 const avatarurl = ref('');
 const router = useRouter();
 const props = defineProps({
-    signedIn: String
+    signedIn: String,
+    url : String
 })
 
 onMounted(() => {
-   if(props.signedIn === '1'){
-   document.getElementById('logIn').style.display = 'none';
-   if(window.localStorage.getItem('avatar') === null){
-   axios.get('http://localhost:5075/api/account/avatar',{
-         headers: {
-              'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-         }
-    }).then((res) => {
-         avatarurl.value = res.data;
-         window.localStorage.setItem('avatar', res.data);
-    })
- }
- else{
-    avatarurl.value = window.localStorage.getItem('avatar');
- }
-}
+    if (window.localStorage.getItem('token') !== null) {
+        if(props.url !== undefined)
+        router.push({
+            path: `/${props.url}`,
+        });
+        else{
+            router.push({
+                path: `/main`,
+            });
+        }
+    }
+    if (props.signedIn === '1') {
+        document.getElementById('logIn').style.display = 'none';
+        if (window.localStorage.getItem('avatar') === null) {
+            axios.get('http://localhost:5075/api/account/avatar', {
+                headers: {
+                    'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+                }
+            }).then((res) => {
+                avatarurl.value = res.data;
+                window.localStorage.setItem('avatar', res.data);
+            })
+        }
+        else {
+            avatarurl.value = window.localStorage.getItem('avatar');
+        }
+    }
 });
 
 

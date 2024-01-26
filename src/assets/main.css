@@ -9,33 +9,34 @@
 
 @media (max-height: 400px) {
   .fixed-container {
-    margin-top: 100px !important; 
+    margin-top: 100px !important;
   }
 }
 
 
 
-html{
+html {
   overflow-x: hidden;
 }
 
 
 
-#logIn{
+#logIn {
 
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.5s ease, max-height 0.5s ease;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.5s ease, max-height 0.5s ease;
 }
 
-#logIn *{
-  font-weight : bold;
+#logIn * {
+  font-weight: bold;
 }
 
 .show {
   opacity: 1 !important;
-  max-height: 500px !important; /* Adjust the max-height as needed */
+  max-height: 500px !important;
+  /* Adjust the max-height as needed */
 }
 
 .hide {
@@ -43,31 +44,33 @@ html{
   max-height: 0 !important;
 }
 
-body::-webkit-scrollbar-track{
+body::-webkit-scrollbar-track {
   background: inherit;
 
 }
-body::-webkit-scrollbar{
+
+body::-webkit-scrollbar {
   width: 7px;
 }
-body::-webkit-scrollbar-thumb{
+
+body::-webkit-scrollbar-thumb {
   background: gray;
 
 }
 
-#joinNow{
+#joinNow {
   background: linear-gradient(to right, #ff5858, #f857a6);
 }
 
-.login-btn{
-  background :linear-gradient(to right, #ff5858, #f857a6);
+.login-btn {
+  background: linear-gradient(to right, #ff5858, #f857a6);
 }
 
-.fixed-container{
-  text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
+.fixed-container {
+  text-shadow: -1px -1px 1px rgba(255, 255, 255, .1), 1px 1px 1px rgba(0, 0, 0, .5);
 }
 
-#avatar{
+#avatar {
   border-radius: 50%;
 }
 
@@ -82,24 +85,27 @@ body::-webkit-scrollbar-thumb{
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
   }
 
-  @keyframes rotation {
-  0% {
-      transform: rotate(0deg);
-  }
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
-  } 
-  .carousel {
-    display: inline-flex;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 }
+
+.carousel {
+  display: inline-flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .carousel-item {
   box-sizing: content-box;
   display: flex;
@@ -113,8 +119,8 @@ body::-webkit-scrollbar-thumb{
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
-
-

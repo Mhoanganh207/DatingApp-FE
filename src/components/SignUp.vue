@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios';
 import Account from '../model/account.js';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import router from '@/router';
 
 const firstname = ref('');
@@ -11,17 +11,25 @@ const password = ref('');
 const gender = ref('');
 const birthdate = ref('');
 
-function signUp(){
-   const account = new Account(email.value,password.value,firstname.value,surname.value,gender.value,new Date(birthdate.value).toJSON(),'');
-   console.log(account);
-   axios.post('http://localhost:5075/api/account',account).then(response => {
-       router.push({
-              path: `/account/avatar/${response.data.id}/${gender.value}`,
-              
-       });
-   }).catch(error => {
-       console.log(error);
-   });
+onMounted(() => {
+    if (window.localStorage.getItem('token') !== null) {
+        router.push({
+            path: `/main`,
+        });
+    }
+});
+
+function signUp() {
+    const account = new Account(email.value, password.value, firstname.value, surname.value, gender.value, new Date(birthdate.value).toJSON(), '');
+    console.log(account);
+    axios.post('http://localhost:5075/api/account', account).then(response => {
+        router.push({
+            path: `/account/avatar/${response.data.id}/${gender.value}`,
+
+        });
+    }).catch(error => {
+        console.log(error);
+    });
 }
 
 
@@ -40,11 +48,11 @@ function signUp(){
                         Create account
                     </h1>
                     <form class="space-y-3 md:space-y-6" action="#">
-                        <div  class="flex space-x-2">
+                        <div class="flex space-x-2">
                             <input v-model="firstname" type="text" name="name"
                                 class="logIn-input bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-1/2 p-2.5 "
                                 placeholder="First name" required>
-                            <input v-model ="surname" type="text" name="name"
+                            <input v-model="surname" type="text" name="name"
                                 class="logIn-input bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-1/2 p-2.5 "
                                 placeholder="Surname" required>
                         </div>
@@ -63,13 +71,15 @@ function signUp(){
                                 <label>Gender</label>
                                 <div class="flex mt-2 space-x-6">
                                     <div class="flex items-center">
-                                        <input v-model="gender" id="default-radio-1" type="radio" :value="true" name="default-radio"
+                                        <input v-model="gender" id="default-radio-1" type="radio" :value="true"
+                                            name="default-radio"
                                             class="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-300">
                                         <label for="default-radio-1"
                                             class="ms-1 text-sm font-semibold text-gray-900 dark:text-gray-300">Male</label>
                                     </div>
                                     <div class="flex items-center">
-                                        <input v-model="gender" id="default-radio-2" type="radio" :value="false" name="default-radio"
+                                        <input v-model="gender" id="default-radio-2" type="radio" :value="false"
+                                            name="default-radio"
                                             class="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-300">
                                         <label for="default-radio-2"
                                             class="ms-1 text-sm font-semibold text-gray-900 dark:text-gray-300">Female</label>
