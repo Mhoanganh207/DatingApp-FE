@@ -52,9 +52,7 @@ watch(() => props.active, async (value) => {
         await connection.stop();
     }
     await connection.start();
-    connection.invoke("JoinChat", props.chatId).then(() => {
-        console.log("joined props");
-    });
+    connection.invoke("JoinChat", props.chatId);
 });
 
 async function onInit(){
@@ -66,9 +64,7 @@ async function onInit(){
             messages.value = response.data;
         });
 
-        await connection.invoke("JoinChat", chatId.value).then(() => {
-            console.log("joined");
-        });
+        await connection.invoke("JoinChat", chatId.value);
     }
 }
 
@@ -77,7 +73,6 @@ async function retriveUserInfo(user) {
         headers: {
             Authorization: 'Bearer ' + window.localStorage.getItem('token')
         }
-    
     })
         .then((response) => {
             user.value = response.data;

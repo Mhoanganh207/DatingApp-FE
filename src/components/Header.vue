@@ -104,17 +104,6 @@ const props = defineProps({
 })
 
 onMounted(() => {
-    // if (window.localStorage.getItem('token') !== null) {
-    //     if (props.url !== undefined)
-    //         router.push({
-    //             path: `/${props.url}`,
-    //         });
-    //     else {
-    //         router.push({
-    //             path: `/main`,
-    //         });
-    //     }
-    // }
     if (props.signedIn === '1') {
         document.getElementById('logIn').style.display = 'none';
         if (window.localStorage.getItem('avatar') === null) {

@@ -13,11 +13,6 @@ const load = ref(false);
 const interestedList = ['Sport', 'Music', 'Travel', 'Cooking', 'Reading', 'Movies', 'Dancing', 'Photography', 'Art', 'Fashion', 'Gaming', 'Yoga'];
 const list = [];
 onMounted(() => {
-    if (window.localStorage.getItem('token') !== null) {
-        router.push({
-            path: `/main`,
-        });
-    }
     id.value = route.params.id;
     if (route.params.gender === 'true') {
         avatar.value = 'src/assets/images/male.jpeg';

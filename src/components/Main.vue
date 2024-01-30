@@ -59,11 +59,6 @@ function sentMessage(id) {
     })
 }
 onMounted(async () => {
-    if (window.localStorage.getItem('token') === null) {
-        router.push({
-            path: `/`,
-        });
-    }
     await getUserList();
     userList.value.forEach(async (user) => {
         const blob = await getUserAvatar(user.id);

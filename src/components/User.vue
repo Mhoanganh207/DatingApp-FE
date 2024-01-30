@@ -1,18 +1,7 @@
 <script setup>
 import Header from './Header.vue';
 import Message from './Message.vue';
-import MessageBox from './MessageBox.vue';
-import { onMounted, ref } from 'vue';
-import { useRoute,useRouter } from 'vue-router';
-const router = useRouter();
-const route = useRoute();
-onMounted(() => {
-    if (window.localStorage.getItem('token') === null) {
-        router.push({
-            path: `/`,
-        });
-    }
-});
+
 
 </script>
 
