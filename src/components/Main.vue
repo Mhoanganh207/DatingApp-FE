@@ -8,7 +8,7 @@ const router = useRouter();
 const userList = ref([]);
 let page = 1;
 async function getUserList() {
-    await axios.get('http://localhost:5075/api/account/all/' + page,{
+    await axios.get('http://localhost:5075/api/account/all/' + page, {
         headers: {
             Authorization: 'Bearer ' + window.localStorage.getItem('token')
         }
@@ -32,7 +32,7 @@ async function getUserAvatar(id) {
 function addToFavorite(id) {
     console.log(id);
     document.getElementById('carousel').removeChild(document.getElementById(id));
-    axios.get('http://localhost:5075/api/account/favourite/'+id ,{
+    axios.get('http://localhost:5075/api/account/favourite/' + id, {
         headers: {
             Authorization: 'Bearer ' + window.localStorage.getItem('token')
         }
@@ -40,6 +40,22 @@ function addToFavorite(id) {
         console.log(res);
     }).catch((err) => {
         console.log(err);
+    })
+}
+function showBox(id) {
+    if (document.getElementById('textbox' + id).style.display === 'none') {
+        document.getElementById('textbox' + id).style.display = 'flex';
+    }
+    else {
+        document.getElementById('textbox' + id).style.display = 'none';
+    }
+}
+function sentMessage(id) {
+    let message = document.getElementById('textbox' + id).children[0].value;
+    axios.post('http://localhost:5075/api/chat',{content : message, receiveid : id}, {
+        headers: {
+            Authorization: 'Bearer ' + window.localStorage.getItem('token')
+        }
     })
 }
 onMounted(async () => {
@@ -59,24 +75,33 @@ onMounted(async () => {
 
 <template>
     <Header signedIn='1' />
-
-    <div class="flex items-center justify-center bg-transparent">
+    <div class="flex items-center justify-center bg-transparent z-10 absolute">
         <div class="user-carousel">
-            <div id="carousel" class="inline-flex overflow-x-scroll h-[90vh] no-scrollbar w-screen pb-4 pl-16 pt-16 space-x-4">
+            <div id="carousel"
+                class="inline-flex overflow-x-scroll h-[90vh] no-scrollbar w-screen pb-4 pl-16 pt-16 space-x-4">
                 <div v-for="user of userList" :id="user.id"
-                    class="carousel-item  card w-[380px] h-[500px] bg-white shadow-2xl rounded-2xl p-2 flex items-center flex-col space-y-4 z-20">
+                    class="z-0 carousel-item  card w-[380px] h-[500px] bg-white shadow-2xl rounded-2xl p-2 flex items-center flex-col space-y-4">
                     <div v-if="user.avatarurl"
                         :style="{ backgroundImage: `url('${user.avatarurl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }"
-                        alt="" class="w-[320px] h-[400px] rounded-lg shadow-md flex items-end p-7 user-image">
-                        <div>
+                        alt=""
+                        class="h-[400px] w-[340px] rounded-lg shadow-md flex flex-col-reverse items-end p-7 user-image">
+                        <div :id="'textbox' + user.id"
+                            class="h-[100px] rounded-md shadow-lg p-2 bg-white z-30 space-x-2" style="display: none;">
+                            <textarea
+                                class="w-4/5 focus:border-pink-400 border-spacing-1 border-gray-200 rounded-md border-2 focus:outline-none focus:ring-pink-300">
+                            </textarea>
+                            <button @click="sentMessage(user.id)"
+                                class="w-1/5 h-[30px] bg-pink-400 hover:bg-pink-500 duration-200 rounded-md text-white font-bold">Send</button>
+                        </div>
+                        <div class="w-full">
                             <div class="text-lg font-bold text-white"> {{ user.firstname + ' ' + user.surname }} </div>
                             <div class="font-semibold text-pink-200"> {{ user.age }} </div>
                             <div class="font-medium text-pink-100"> {{ user.introduction }}</div>
                         </div>
                     </div>
                     <AnimatedPlaceholder v-if="!user.avatarurl" height="400px" width="320px" borderRadius="1rem" />
-                    <div @click="addToFavorite(user.id,$event)" class="flex space-x-4">
-                        <button
+                    <div class="flex space-x-4">
+                        <button @click="addToFavorite(user.id, $event)"
                             class="bg-white p-1 shadow-md rounded-full flex items-center justify-center hover:bg-[#f796a6] duration-300 w-14 h-14">
                             <svg width="50" height="50" viewBox="0 0 24 24"
                                 class="fill-[#f796a6] hover:fill-white duration-300">
@@ -85,7 +110,7 @@ onMounted(async () => {
                                     d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" />
                             </svg>
                         </button>
-                        <button
+                        <button @click="showBox(user.id)"
                             class="bg-white p-1 shadow-md rounded-full flex items-center justify-center hover:bg-green-300 duration-300 w-14 h-14">
                             <svg class="fill-green-300 hover:fill-white duration-300" version="1.1" id="Capa_1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40"
@@ -97,7 +122,8 @@ onMounted(async () => {
                                 </g>
                             </svg>
                         </button>
-                        
+
+
                     </div>
                 </div>
             </div>

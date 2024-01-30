@@ -1,14 +1,27 @@
 <template>
-    <header class="min-w-full h-16  bg-transparent flex items-center pl-10 pr-10 justify-between z-10 relative">
-        <a class="items-start">
+    <header class="min-w-full h-16  bg-transparent flex items-center pl-10 pr-10 justify-between relative z-50">
+        <a class="items-start cursor-pointer" @click="router.push('/main')">
             <img src="../assets/images/logo.png" alt="logo" class="h-18 w-44 sm:w-60">
         </a>
 
         <button v-if="props.signedIn !== '1'" @click="showLogin"
             class="login-btn duration-300  rounded-3xl px-6 py-1.5 text-lg text-white font-bold items-end shadow-md">Log
             In</button>
-        <img v-if="props.signedIn === '1'" @click="router.push('/user')"
-            class="rounded-full cursor-pointer object-cover w-12 h-12" :src='getAvatar()'>
+        <img @mouseover="showFunc" @mouseout="hideFunc" id="avatar" v-if="props.signedIn === '1'"
+            class="rounded-full cursor-pointer object-cover w-12 h-12 relative" :src='getAvatar()'>
+        <div @mouseover="showFunc" @mouseout="hideFunc" v-if="props.signedIn === '1'"
+            class="w-[110px] h-[80px] justify-center  absolute bg-transparent rounded-lg top-[50px] right-[24px] mt-4 z-50">
+           </div>
+        <div @mouseover="showFunc" @mouseout="hideFunc" v-show="isFuncVisible" id="func" v-if="props.signedIn === '1'"
+            class="w-[110px] h-[80px] flex-col justify-center  absolute bg-white rounded-lg top-[55px] right-[24px] mt-4 z-50"
+            style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            <button @click="router.push('/account/message')"
+                class="w-full text-center h-1/2 font-bold rounded-t-lg hover:bg-pink-300 hover:text-white duration-200">You</button>
+            <!-- <div class="w-full h-[1px] bg-slate-400"></div> -->
+            <button @click="signOut"
+                class="w-full bg-red-500 h-1/2 text-white font-bold rounded-b-lg hover:bg-black hover:text-white duration-200">Sign
+                Out</button>
+        </div>
 
     </header>
     <div id="logIn" class="max-w-md p-8 mx-auto shadow-lg rounded-2xl mt-5 mb-5 z-20 relative bg-white">
@@ -72,33 +85,36 @@
     <div id="logInBd" style="background: rgb(0,0,0, 0.4); display: none;" class="h-full w-full fixed top-0 z-10"></div>
 </template>
 
+<style scoped></style>
+
 <script setup>
 
 import axios from 'axios';
-import { onMounted, ref, onBeforeMount } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const unauthenticated = ref(false);
 const email = ref('');
 const password = ref('');
 const avatarurl = ref('');
+const isFuncVisible = ref(false);
 const router = useRouter();
 const props = defineProps({
     signedIn: String,
-    url : String
+    url: String
 })
 
 onMounted(() => {
-    if (window.localStorage.getItem('token') !== null) {
-        if(props.url !== undefined)
-        router.push({
-            path: `/${props.url}`,
-        });
-        else{
-            router.push({
-                path: `/main`,
-            });
-        }
-    }
+    // if (window.localStorage.getItem('token') !== null) {
+    //     if (props.url !== undefined)
+    //         router.push({
+    //             path: `/${props.url}`,
+    //         });
+    //     else {
+    //         router.push({
+    //             path: `/main`,
+    //         });
+    //     }
+    // }
     if (props.signedIn === '1') {
         document.getElementById('logIn').style.display = 'none';
         if (window.localStorage.getItem('avatar') === null) {
@@ -118,11 +134,18 @@ onMounted(() => {
 });
 
 
+
 function getAvatar() {
     return avatarurl.value;
 }
 
-
+function signOut() {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('avatar');
+    router.push({
+        path: `/`,
+    });
+}
 function showLogin() {
     document.getElementById("logIn")?.classList.remove("hide");
     document.getElementById("logIn")?.classList.add("show");
@@ -150,6 +173,14 @@ function login() {
                 unauthenticated.value = true;
             }
         })
+}
+function showFunc() {
+    isFuncVisible.value = true;
+}
+function hideFunc() {
+
+    isFuncVisible.value = false;
+
 }
 </script>
 

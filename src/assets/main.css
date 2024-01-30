@@ -44,18 +44,18 @@ html {
   max-height: 0 !important;
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: inherit;
 
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 7px;
 }
 
-body::-webkit-scrollbar-thumb {
-  background: gray;
-
+*::-webkit-scrollbar-thumb {
+  background: rgb(192, 190, 190);
+  border-radius: 15px;
 }
 
 #joinNow {
