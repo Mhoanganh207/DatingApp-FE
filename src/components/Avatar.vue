@@ -2,9 +2,8 @@
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
 import router from '@/router';
-
+import UserService from '../services/user.service'
 const introduction = ref('');
 const avatar = ref('');
 const id = ref('');
@@ -58,20 +57,12 @@ function uploadAvatar() {
     const formData = new FormData();
     formData.append('file', document.getElementById("files").files[0]);
     load.value = true;
-    axios.put('http://localhost:5075/api/account/' + id.value + '/info', {
-        interested: getInterestedList(),
-        introduction: introduction.value
-    });
-    axios.post('http://localhost:5075/api/account/' + id.value + '/avatar', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    }).then(response => {
-        window.localStorage.setItem('token', response.data);
+    UserService.updateInterestedList(getInterestedList(), introduction.value)
+    UserService.postAvatar(id.value,formData).then(response => {
+        window.localStorage.setItem('token', response);
         router.push({
             path: `/main`,
         });
-
     }).catch(error => {
         console.log(error);
         load.value = false;

@@ -1,8 +1,9 @@
 <script setup>
 import axios from 'axios';
-import Account from '../model/account.js';
+import Account from '../models/account.js';
 import { ref, onMounted } from 'vue';
 import router from '@/router';
+import  AuthService  from '../services/auth.service.js';
 
 const firstname = ref('');
 const surname = ref('');
@@ -19,17 +20,14 @@ onMounted(() => {
     }
 });
 
-function signUp() {
+async function signUp() {
     const account = new Account(email.value, password.value, firstname.value, surname.value, gender.value, new Date(birthdate.value).toJSON(), '');
-    console.log(account);
-    axios.post('http://localhost:5075/api/account', account).then(response => {
+    let response = await AuthService.signUp(account)
+    if (response){
         router.push({
             path: `/account/avatar/${response.data.id}/${gender.value}`,
-
         });
-    }).catch(error => {
-        console.log(error);
-    });
+    }
 }
 
 

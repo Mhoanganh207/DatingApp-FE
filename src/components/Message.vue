@@ -3,7 +3,7 @@ import { onMounted, ref} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import AnimatedPlaceholder from './AnimatedPlaceholder.vue';
 import MessageBox from './MessageBox.vue';
-import axios from 'axios';
+import UserService from '../services/user.service';
 const messages = ref([]);
 const router = useRouter();
 const route = useRoute();
@@ -12,12 +12,7 @@ const chatId = ref('0');
 const boxactive = ref(0);
 
 async function getUserAvatar(id) {
-    let result = '';
-    await axios.get('http://localhost:5075/api/account/' + id + '/avatar', { responseType: 'blob' })
-        .then((response) => {
-            result = response.data;
-            return;
-        })
+    let result = await UserService.getAvatarById(id);
     return result;
 
 }
@@ -31,15 +26,11 @@ onMounted(async () => {
         active.value = '0';
     }
     try {
-        const response = await axios.get('http://localhost:5075/api/chat', {
-            headers: {
-                Authorization: 'Bearer ' + window.localStorage.getItem('token')
-            }
-        });
+        const response = await UserService.getChat();
         messages.value = response.data.chatList;
 
         const updatedMessages = await Promise.all(messages.value.map(async (element) => {
-            const accountResponse = await axios.get(`http://localhost:5075/api/account/${element.accountId}`);
+            const accountResponse = await UserService.getUserById(element.accountId);
             const accountData = accountResponse.data;
             const avatarResponse = await getUserAvatar(accountData.id);
             accountData.avatarurl = avatarResponse ? URL.createObjectURL(avatarResponse) : null;

@@ -8,7 +8,7 @@
             class="login-btn duration-300  rounded-3xl px-6 py-1.5 text-lg text-white font-bold items-end shadow-md">Log
             In</button>
         <img @mouseover="showFunc" @mouseout="hideFunc" id="avatar" v-if="props.signedIn === '1'"
-            class="rounded-full cursor-pointer object-cover w-12 h-12 relative" :src='getAvatar()'>
+            class="rounded-full cursor-pointer object-cover w-12 h-12 relative" :src=avatarurl>
         <div @mouseover="showFunc" @mouseout="hideFunc" v-if="props.signedIn === '1'"
             class="w-[110px] h-[80px] justify-center  absolute bg-transparent rounded-lg top-[50px] right-[24px] mt-4 z-50">
            </div>
@@ -89,7 +89,8 @@
 
 <script setup>
 
-import axios from 'axios';
+import  AuthService  from '../services/auth.service';
+import UserService from '../services/user.service'
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const unauthenticated = ref(false);
@@ -103,18 +104,11 @@ const props = defineProps({
     url: String
 })
 
-onMounted(() => {
+onMounted(async () => {
     if (props.signedIn === '1') {
         document.getElementById('logIn').style.display = 'none';
         if (window.localStorage.getItem('avatar') === null) {
-            axios.get('http://localhost:5075/api/account/avatar', {
-                headers: {
-                    'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-                }
-            }).then((res) => {
-                avatarurl.value = res.data;
-                window.localStorage.setItem('avatar', res.data);
-            })
+            avatarurl.value = await UserService.getAvatar();
         }
         else {
             avatarurl.value = window.localStorage.getItem('avatar');
@@ -124,9 +118,7 @@ onMounted(() => {
 
 
 
-function getAvatar() {
-    return avatarurl.value;
-}
+
 
 function signOut() {
     window.localStorage.removeItem('token');
@@ -145,23 +137,18 @@ function hideLogin() {
     document.getElementById("logIn")?.classList.add("hide");
     document.getElementById("logInBd").style.display = "none";
 }
-function login() {
+async function login() {
     const data = {
         username: email.value,
         password: password.value
     };
-    axios.post('http://localhost:5075/api/account/login', data).then((res) => {
-        window.localStorage.setItem('token', res.data.token);
-        router.push({
-            path: `/main`,
-        });
-    })
-        .catch((err) => {
-            console.log(err);
-            if (err.response.status === 401) {
-                unauthenticated.value = true;
-            }
-        })
+    let isAuthenticated = await AuthService.signIn(data);
+    if(isAuthenticated){
+        router.push("/main");
+    }
+    else{
+        unauthenticated.value = true;
+    }
 }
 function showFunc() {
     isFuncVisible.value = true;
@@ -174,3 +161,4 @@ function hideFunc() {
 </script>
 
 
+../services/user.service

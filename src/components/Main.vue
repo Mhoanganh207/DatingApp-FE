@@ -1,46 +1,25 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import Header from './Header.vue';
 import AnimatedPlaceholder from './AnimatedPlaceholder.vue';
+import UserService from "../services/user.service"
+import ChatService from "../services/chat.service"
 const router = useRouter();
 const userList = ref([]);
 let page = 1;
 async function getUserList() {
-    await axios.get('http://localhost:5075/api/account/all/' + page, {
-        headers: {
-            Authorization: 'Bearer ' + window.localStorage.getItem('token')
-        }
-    })
-        .then((response) => {
-            userList.value = response.data;
+            userList.value = await UserService.getUser(page);
             page++;
-            return;
-        })
 }
 async function getUserAvatar(id) {
-    let result = '';
-    await axios.get('http://localhost:5075/api/account/' + id + '/avatar', { responseType: 'blob' })
-        .then((response) => {
-            result = response.data;
-            return;
-        })
+    let result = await UserService.getAvatarById(id);
     return result;
 
 }
 function addToFavorite(id) {
-    console.log(id);
     document.getElementById('carousel').removeChild(document.getElementById(id));
-    axios.get('http://localhost:5075/api/account/favourite/' + id, {
-        headers: {
-            Authorization: 'Bearer ' + window.localStorage.getItem('token')
-        }
-    }).then((res) => {
-        console.log(res);
-    }).catch((err) => {
-        console.log(err);
-    })
+    UserService.addUserToFavList(id);
 }
 function showBox(id) {
     if (document.getElementById('textbox' + id).style.display === 'none') {
@@ -52,11 +31,7 @@ function showBox(id) {
 }
 function sentMessage(id) {
     let message = document.getElementById('textbox' + id).children[0].value;
-    axios.post('http://localhost:5075/api/chat',{content : message, receiveid : id}, {
-        headers: {
-            Authorization: 'Bearer ' + window.localStorage.getItem('token')
-        }
-    })
+    ChatService.sendMessage(message,id)
 }
 onMounted(async () => {
     await getUserList();

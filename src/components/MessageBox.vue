@@ -1,8 +1,9 @@
 <script setup>
-import axios from 'axios';
 import { onMounted, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
+import ChatService from "../services/chat.service"
+import UserService from "../services/user.service"
 const route = useRoute();
 const fetched = ref(false);
 const chatId = ref('0');
@@ -44,10 +45,7 @@ watch(() => props.active, async (value) => {
     message.value = '';
     account.value = value;
     chatId.value = props.chatId;
-    await axios.get('http://localhost:5075/api/chat/messages/' + +props.chatId).then((response) => {
-        messages.value = response.data;
-    });
-
+    messages.value = await ChatService.getChatById(props.chatId)
     if (connection && connection.state === 'Connected') {
         await connection.stop();
     }
@@ -60,24 +58,15 @@ async function onInit(){
         fetched.value = true;
         chatId.value = route.params.id;
         account.value = route.params.accountId;
-        await axios.get('http://localhost:5075/api/chat/messages/' + +route.params.id).then((response) => {
-            messages.value = response.data;
-        });
+        messages.value = await ChatService.getChatById(route.params.id);
 
         await connection.invoke("JoinChat", chatId.value);
     }
 }
 
 async function retriveUserInfo(user) {
-    await axios.get('http://localhost:5075/api/account/info',{
-        headers: {
-            Authorization: 'Bearer ' + window.localStorage.getItem('token')
-        }
-    })
-        .then((response) => {
-            user.value = response.data;
-            return;
-        })
+   
+      user.value = await UserService.getInfor()
 }
 
 function receiveMessage(id,msg){
