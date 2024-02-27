@@ -123,6 +123,7 @@ onMounted(async () => {
 function signOut() {
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('avatar');
+    window.localStorage.removeItem('refreshtoken');
     router.push({
         path: `/`,
     });
@@ -160,5 +161,3 @@ function hideFunc() {
 }
 </script>
 
-
-../services/user.service

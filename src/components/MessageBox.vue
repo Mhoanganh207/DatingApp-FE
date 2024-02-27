@@ -66,7 +66,7 @@ async function onInit(){
 
 async function retriveUserInfo(user) {
    
-      user.value = await UserService.getInfor()
+      user.value = await UserService.getInfor();
 }
 
 function receiveMessage(id,msg){

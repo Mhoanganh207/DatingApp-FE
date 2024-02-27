@@ -39,8 +39,8 @@ class UserService {
         })
     }
 
-    async updateInterestedList(list, introduction) {
-        axios.put('http://localhost:5075/api/account/' + id.value + '/info', {
+    async updateInterestedList(id,list, introduction) {
+        axios.put('http://localhost:5075/api/account/' + id + '/info', {
             interested: list,
             introduction: introduction
         });
@@ -76,6 +76,8 @@ class UserService {
             headers: {
                 Authorization: 'Bearer ' + window.localStorage.getItem('token')
             }
+        }).then(res =>{
+            return res.data;
         });
     }
 }

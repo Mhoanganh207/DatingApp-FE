@@ -57,9 +57,10 @@ function uploadAvatar() {
     const formData = new FormData();
     formData.append('file', document.getElementById("files").files[0]);
     load.value = true;
-    UserService.updateInterestedList(getInterestedList(), introduction.value)
+    UserService.updateInterestedList(id.value,getInterestedList(), introduction.value)
     UserService.postAvatar(id.value,formData).then(response => {
-        window.localStorage.setItem('token', response);
+        window.localStorage.setItem('token', response.data.token);
+        window.localStorage.setItem("refreshtoken", response.data.refreshtoken);
         router.push({
             path: `/main`,
         });

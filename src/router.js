@@ -4,6 +4,7 @@ import SignUpVue from "./components/SignUp.vue";
 import AvatarVue from "./components/Avatar.vue";
 import MainVue from "./components/Main.vue";
 import UserVue from "./components/User.vue";
+import axios from "axios";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -26,5 +27,10 @@ router.beforeEach(async (to, from, next) => {
         next();
     }
 });
+
+axios.interceptors.response.use()
+
+
+
 
 export default router;
