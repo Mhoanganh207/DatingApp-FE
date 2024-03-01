@@ -2,10 +2,7 @@
 import Header from './Header.vue';
 import Message from './Message.vue';
 
-
 </script>
-
-
 
 <template>
     <Header signedIn='1'/>

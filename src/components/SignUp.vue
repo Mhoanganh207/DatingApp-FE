@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios';
+
 import Account from '../models/account.js';
 import { ref, onMounted } from 'vue';
 import router from '@/router';

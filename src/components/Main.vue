@@ -31,6 +31,7 @@ function showBox(id) {
 }
 function sentMessage(id) {
     let message = document.getElementById('textbox' + id).children[0].value;
+    document.getElementById('carousel').removeChild(document.getElementById(id));
     ChatService.sendMessage(message,id)
 }
 onMounted(async () => {

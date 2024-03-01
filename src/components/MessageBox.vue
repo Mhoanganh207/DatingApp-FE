@@ -1,9 +1,10 @@
 <script setup>
 import { onMounted, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
+import connection from '../services/chat.connection';
 import ChatService from "../services/chat.service"
 import UserService from "../services/user.service"
+
 const route = useRoute();
 const fetched = ref(false);
 const chatId = ref('0');
@@ -15,20 +16,13 @@ const props = defineProps({
     active: String,
     chatId: String
 });
-let connection = null;
+
+const emit = defineEmits(['SendMessage']);
+
 onMounted(async () => {
-    connection = connection = new HubConnectionBuilder()
-        .withUrl("http://localhost:5075/chathub", {
-            skipNegotiation: true,
-            transport: HttpTransportType.WebSockets
-        })
-        .withAutomaticReconnect()
-        .build();
-
-
-    await connection
-        .start();
-
+    if (connection.state === 'Disconnected') {
+        await connection.start();
+    }
     connection.on("ReceiveMessage", (sendId,message) => {
         receiveMessage(sendId,message);
     });
@@ -41,15 +35,14 @@ onMounted(async () => {
 })
 
 watch(() => props.active, async (value) => {
+    
     if (props.chatId === '0') return;
     message.value = '';
     account.value = value;
     chatId.value = props.chatId;
-    messages.value = await ChatService.getChatById(props.chatId)
-    if (connection && connection.state === 'Connected') {
-        await connection.stop();
-    }
-    await connection.start();
+    messages.value = await ChatService.getChatById(props.chatId);
+
+    connection.invoke("LeaveChat", chatId.value);
     connection.invoke("JoinChat", props.chatId);
 });
 
@@ -60,13 +53,15 @@ async function onInit(){
         account.value = route.params.accountId;
         messages.value = await ChatService.getChatById(route.params.id);
 
+
         await connection.invoke("JoinChat", chatId.value);
     }
 }
 
 async function retriveUserInfo(user) {
-   
+      
       user.value = await UserService.getInfor();
+      await connection.invoke("ActiveUser",user.value.id.toString());
 }
 
 function receiveMessage(id,msg){
@@ -79,11 +74,12 @@ function receiveMessage(id,msg){
     
 }
 function sendMessage() {
-    connection.invoke("SendMessage", chatId.value, user.value.id.toString() ,message.value);
+    connection.invoke("SendMessage", chatId.value, user.value.id.toString(), account.value ,message.value);
     messages.value.push({
         sendId: user.value.id,
         content: message.value
     });
+    emit('SendMessage', chatId.value,message.value);
     message.value = '';
     document.getElementById('messageList').scrollTo(0, document.getElementById('messageList').scrollHeight);
 }

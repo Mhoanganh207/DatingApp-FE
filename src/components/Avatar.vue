@@ -9,6 +9,7 @@ const avatar = ref('');
 const id = ref('');
 const route = useRoute();
 const load = ref(false);
+const fileEmpty = ref(false);
 const interestedList = ['Sport', 'Music', 'Travel', 'Cooking', 'Reading', 'Movies', 'Dancing', 'Photography', 'Art', 'Fashion', 'Gaming', 'Yoga'];
 const list = [];
 onMounted(() => {
@@ -54,8 +55,13 @@ function getInterestedList() {
 }
 
 function uploadAvatar() {
+    const files = document.getElementById("files").files;
+    if (files.length === 0) {
+        fileEmpty.value = true;
+        return;
+    }
     const formData = new FormData();
-    formData.append('file', document.getElementById("files").files[0]);
+    formData.append('file', files[0]);
     load.value = true;
     UserService.updateInterestedList(id.value,getInterestedList(), introduction.value)
     UserService.postAvatar(id.value,formData).then(response => {
@@ -95,8 +101,9 @@ function uploadAvatar() {
             <div class="flex flex-col space-y-5 items-center w-80">
                 <h1 class="text-2xl font-bold">Upload your avatar</h1>
                 <div>
-                    <img id="avatar" class="w-80 h-80 object-cover" :src="getImage()" alt="avatar">
+                    <img id="avatar" class="w-80 h-80 object-cover " :class="{'border-spacing-1 border-2 border-red-600': fileEmpty}" :src="getImage()" alt="avatar">
                 </div>
+                <div v-if="fileEmpty" class="font-bold text-red-600">Please upload your avatar</div>
                 <div class="flex space-x-3">
                     <input @change="handleImage" type="file" accept="image/*" id="files" class="hidden" />
                     <label

@@ -19,7 +19,7 @@
                 class="w-full text-center h-1/2 font-bold rounded-t-lg hover:bg-pink-300 hover:text-white duration-200">You</button>
             <!-- <div class="w-full h-[1px] bg-slate-400"></div> -->
             <button @click="signOut"
-                class="w-full bg-red-500 h-1/2 text-white font-bold rounded-b-lg hover:bg-black hover:text-white duration-200">Sign
+                class="w-full bg-red-500 h-1/2 text-white font-bold rounded-b-lg hover:bg-black hover:text-white duration-200">Log
                 Out</button>
         </div>
 
