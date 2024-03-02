@@ -1,13 +1,21 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import Header from './Header.vue';
 import AnimatedPlaceholder from './AnimatedPlaceholder.vue';
 import UserService from "../services/user.service"
 import ChatService from "../services/chat.service"
-const router = useRouter();
 const userList = ref([]);
 let page = 1;
+
+onMounted(async () => {
+    await getUserList();
+    userList.value.forEach(async (user) => {
+        const blob = await getUserAvatar(user.id);
+        const imageUrl = URL.createObjectURL(blob);
+        user.avatarurl = imageUrl;
+    });
+});
+
 async function getUserList() {
             userList.value = await UserService.getUser(page);
             page++;
@@ -34,14 +42,7 @@ function sentMessage(id) {
     document.getElementById('carousel').removeChild(document.getElementById(id));
     ChatService.sendMessage(message,id)
 }
-onMounted(async () => {
-    await getUserList();
-    userList.value.forEach(async (user) => {
-        const blob = await getUserAvatar(user.id);
-        const imageUrl = URL.createObjectURL(blob);
-        user.avatarurl = imageUrl;
-    });
-});
+
 </script>
 
 <template>

@@ -13,11 +13,6 @@ const active = ref('0');
 const chatId = ref('0');
 const boxactive = ref(0);
 
-async function getUserAvatar(id) {
-    let result = await UserService.getAvatarById(id);
-    return result;
-
-}
 
 onMounted(async () => {
 
@@ -49,6 +44,8 @@ onMounted(async () => {
                 element.lastmessage = element.firstname + ' ' + element.surname + ": " + element.lastMessage.content;
             }
         });
+
+        console.log(messages.value);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
@@ -76,6 +73,11 @@ async function updateMessages(chatId, message) {
     messages.value[0] = item;
     item.lastmessage = "You: " + message;
 
+}
+
+async function getUserAvatar(id) {
+    let result = await UserService.getAvatarById(id);
+    return result;
 
 }
 
