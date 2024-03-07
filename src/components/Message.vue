@@ -45,7 +45,6 @@ onMounted(async () => {
             }
         });
 
-        console.log(messages.value);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }

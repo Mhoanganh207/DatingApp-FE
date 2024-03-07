@@ -1,5 +1,7 @@
 import axios from "axios";
 
+
+
 class UserService {
     async getAvatar() {
         return axios.get('http://localhost:5075/api/account/avatar', {
@@ -10,14 +12,20 @@ class UserService {
             window.localStorage.setItem('avatar', res.data);
             return res.data;
         })
+           
     }
 
     async getChat() {
+        try{
         return axios.get('http://localhost:5075/api/chat', {
             headers: {
                 Authorization: 'Bearer ' + window.localStorage.getItem('token')
             }
         })
+    }catch(err){
+        console.log(err);
+    }
+           
     }
 
     async getUserById(id) {
@@ -39,11 +47,11 @@ class UserService {
         })
     }
 
-    async updateInterestedList(id,list, introduction) {
+    async updateInterestedList(id, list, introduction) {
         axios.put('http://localhost:5075/api/account/' + id + '/info', {
             interested: list,
             introduction: introduction
-        });
+        })
     }
 
     async addUserToFavList(id) {
@@ -60,6 +68,7 @@ class UserService {
     }
 
     async getUser(page) {
+
         return axios.get('http://localhost:5075/api/account/all/' + page, {
             headers: {
                 Authorization: 'Bearer ' + window.localStorage.getItem('token')
@@ -76,9 +85,12 @@ class UserService {
             headers: {
                 Authorization: 'Bearer ' + window.localStorage.getItem('token')
             }
-        }).then(res =>{
+        }).then(res => {
             return res.data;
-        });
+        })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
 
