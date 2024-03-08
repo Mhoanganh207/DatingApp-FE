@@ -51,26 +51,20 @@ onMounted(async () => {
 
     connection.on("NewMessage", (chatId, sendId, message) => {
         const index = messages.value.findIndex(msg => msg.accountId == sendId);
-        const item = messages.value[index];
-        item.lastMessage.sentId = sendId;
-        item.lastMessage.content = message;
-        for (let i = index; i > 0; i--) {
-            messages.value[i] = messages.value[i - 1];
-        }
-        messages.value[0] = item;
-        item.lastmessage = item.firstname + ' ' + item.surname + ": " + message;
-
+        reArrangeMessages(index, (item) => {
+            item.lastMessage.sentId = sendId;
+            item.lastMessage.content = message;
+            item.lastmessage = item.firstname + ' ' + item.surname + ": " + message;
+        })
     })
 });
 
 async function updateMessages(chatId, message) {
     const index = messages.value.findIndex(msg => msg.chatId == chatId);
-    const item = messages.value[index];
-    for (let i = index; i > 0; i--) {
-        messages.value[i] = messages.value[i - 1];
-    }
-    messages.value[0] = item;
-    item.lastmessage = "You: " + message;
+    reArrangeMessages(index, (item) => {
+        item.lastmessage = "You: " + message;
+    });
+    
 
 }
 
@@ -78,6 +72,15 @@ async function getUserAvatar(id) {
     let result = await UserService.getAvatarById(id);
     return result;
 
+}
+
+function reArrangeMessages(index,callback) {
+    const item = messages.value[index];
+    for (let i = index; i > 0; i--) {
+        messages.value[i] = messages.value[i - 1];
+    }
+    messages.value[0] = item;
+    callback(item);
 }
 
 
