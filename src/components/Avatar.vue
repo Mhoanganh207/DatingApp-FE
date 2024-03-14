@@ -10,7 +10,7 @@ const id = ref('');
 const route = useRoute();
 const load = ref(false);
 const fileEmpty = ref(false);
-const interestedList = ['Sport', 'Music', 'Travel', 'Cooking', 'Reading', 'Movies', 'Dancing', 'Photography', 'Art', 'Fashion', 'Gaming', 'Yoga'];
+const interestedList = [{"id":1,"name":'Sport'},{"id":2,"name":'Music'},{"id":3,"name":'Movie'},{"id":4,"name":'Game'},{"id":5,"name":'Reading'},{"id":6,"name":'Travel'},{"id":7,"name":'Cooking'},{"id":8,"name":'Photography'},{"id":9,"name":'Art'},{"id":10,"name":'Fashion'},{"id":11,"name":'Technology'},{"id":12,"name":'Science'},{"id":13,"name":'Education'},{"id":14,"name":'Health'},{"id":15,"name":'Business'}];
 const list = [];
 onMounted(() => {
     id.value = route.params.id;
@@ -47,11 +47,8 @@ function addtoList(index, event) {
 }
 
 function getInterestedList() {
-    let result = '';
-    list.forEach(element => {
-        result += element + ',';
-    });
-    return result;
+    console.log(list);
+    return list;
 }
 
 function uploadAvatar() {
@@ -63,6 +60,7 @@ function uploadAvatar() {
     const formData = new FormData();
     formData.append('file', files[0]);
     load.value = true;
+    getInterestedList();
     UserService.updateInterestedList(id.value,getInterestedList(), introduction.value)
     UserService.postAvatar(id.value,formData).then(response => {
         window.localStorage.setItem('token', response.data.token);
@@ -89,7 +87,7 @@ function uploadAvatar() {
                 <div class="interestedBox">
                     <button @click="addtoList(index, $event)" v-for="(infor, index) in interestedList"
                         class="text-gray-900  bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-200 font-bold rounded-lg visited:bg-pink-400 text-sm px-4 py-2 m-1"
-                        href="">{{ infor }}</button>
+                        href="">{{ infor.name }}</button>
                 </div>
                 <h2 class="text-2xl font-bold">Write something about yourself</h2>
                 <textarea v-model="introduction" id="message" rows="4"

@@ -14,7 +14,8 @@ const router = createRouter({
         { path: '/account/avatar/:id/:gender', component: AvatarVue },
         { path: '/main', component: MainVue },
         { path: '/account/message', component: UserVue },
-        { path: '/account/message/:id/:accountId', component: UserVue }
+        { path: '/account/message/:id/:accountId', component: UserVue },
+        { path: '/main/?search=:search', component: MainVue}
     ]
 });
 

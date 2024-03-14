@@ -1,24 +1,41 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Header from './Header.vue';
 import AnimatedPlaceholder from './AnimatedPlaceholder.vue';
 import UserService from "../services/user.service"
 import ChatService from "../services/chat.service"
+import { useRoute } from 'vue-router';
 const userList = ref([]);
+const route = useRoute();
 let page = 1;
 
-onMounted(async () => {
-    await getUserList();
+watch(() => route.query, fetchData, { immediate: true })
+
+
+async function fetchData() {
+    if (route.query.search) {
+        userList.value = await UserService.searchUser(route.query.search);
+        console.log(userList.value);
+        await updateUserData();
+    }
+    else {
+        if(page > 1) page--;
+        await getUserList();
+        console.log(userList.value);
+        await updateUserData();
+    }
+}
+
+async function getUserList() {
+            userList.value = await UserService.getUser(page);
+            page++;
+}
+async function updateUserData() {
     userList.value.forEach(async (user) => {
         const blob = await getUserAvatar(user.id);
         const imageUrl = URL.createObjectURL(blob);
         user.avatarurl = imageUrl;
     });
-});
-
-async function getUserList() {
-            userList.value = await UserService.getUser(page);
-            page++;
 }
 async function getUserAvatar(id) {
     let result = await UserService.getAvatarById(id);

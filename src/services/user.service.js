@@ -49,7 +49,7 @@ class UserService {
 
     async updateInterestedList(id, list, introduction) {
         axios.put('http://localhost:5075/api/account/' + id + '/info', {
-            interested: list,
+            hobbies: list,
             introduction: introduction
         })
     }
@@ -91,6 +91,16 @@ class UserService {
             .catch(err => {
                 console.log(err);
             });
+    }
+    async searchUser(query) {
+        return axios.get('http://localhost:5075/api/account/search/?q=' + query,{
+            headers: {
+                Authorization: 'Bearer ' + window.localStorage.getItem('token')
+            }
+        })
+            .then((response) => {
+                return response.data;
+            })
     }
 }
 

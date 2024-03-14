@@ -124,3 +124,8 @@ html {
   scrollbar-width: none;
   /* Firefox */
 }
+
+
+.search-btn:hover svg{
+  fill: white;
+}

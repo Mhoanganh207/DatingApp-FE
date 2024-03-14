@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router from '../router';
 
+axios.defaults.headers["Allow-Control-Allow-Origin"] = "http://localhost:5075";
 
 
 axios.interceptors.response.use(
@@ -8,6 +9,7 @@ axios.interceptors.response.use(
         return response
     },
     async (err) => {
+        console.log(err);
         if (err.response.status !== 401) {
             return Promise.reject(err);
         }
@@ -40,6 +42,7 @@ class AuthService {
 
 
     async signIn(account) {
+        console.log(account);
         return axios.post('http://localhost:5075/api/auth/login', account).then(res => {
             window.localStorage.setItem('token', res.data.token);
             window.localStorage.setItem("refreshtoken", res.data.refreshtoken);
