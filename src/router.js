@@ -4,6 +4,7 @@ import SignUpVue from "./components/SignUp.vue";
 import AvatarVue from "./components/Avatar.vue";
 import MainVue from "./components/Main.vue";
 import UserVue from "./components/User.vue";
+import ProfileVue from "./components/Profile.vue";
 import axios from "axios";
 
 const router = createRouter({
@@ -15,7 +16,8 @@ const router = createRouter({
         { path: '/main', component: MainVue },
         { path: '/account/message', component: UserVue },
         { path: '/account/message/:id/:accountId', component: UserVue },
-        { path: '/main/?search=:search', component: MainVue}
+        { path: '/main/?search=:search', component: MainVue},
+        {path :'/account/profile',component : ProfileVue}
     ]
 });
 

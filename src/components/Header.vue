@@ -15,14 +15,15 @@
             class="rounded-full cursor-pointer object-cover w-12 h-12 relative" :src=avatarurl>
         </div>  
         <div @mouseover="showFunc" @mouseout="hideFunc" v-if="props.signedIn === '1'"
-            class="w-[40px] h-[20px] justify-center  absolute bg-transparent rounded-lg top-[36px] right-[24px] mt-4 z-50">
+            class="w-[40px] h-[20px] justify-center  absolute bg-transparent rounded-lg top-[40px] right-[24px] mt-4 z-50">
            </div>
         <div @mouseover="showFunc" @mouseout="hideFunc" v-show="isFuncVisible" id="func" v-if="props.signedIn === '1'"
-            class="w-[110px] h-[80px] flex-col justify-center  absolute bg-white rounded-lg top-[55px] right-[24px] mt-4 z-50"
+            class="w-[110px] h-[80px] flex-col justify-center  absolute bg-white rounded-t-lg top-[55px] right-[24px] mt-4 z-50"
             style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
-            <button @click="router.push('/account/message')"
+            <button @click="router.push('/account/profile')"
                 class="w-full text-center h-1/2 font-bold rounded-t-lg hover:bg-pink-300 hover:text-white duration-200">You</button>
-            <!-- <div class="w-full h-[1px] bg-slate-400"></div> -->
+            <button @click="router.push('/account/message')"
+                class="w-full text-center h-1/2 font-bold  hover:bg-pink-300 hover:text-white duration-200">Messages</button>
             <button @click="signOut"
                 class="w-full bg-red-500 h-1/2 text-white font-bold rounded-b-lg hover:bg-black hover:text-white duration-200">Log
                 Out</button>
@@ -99,7 +100,7 @@
 import Search from './Search.vue';
 import  AuthService  from '../services/auth.service';
 import UserService from '../services/user.service'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 const unauthenticated = ref(false);
 const email = ref('');
@@ -111,7 +112,8 @@ const router = useRouter();
 const route = useRoute();
 const props = defineProps({
     signedIn: String,
-    url: String
+    url: String,
+    changeAvatar : Number
 })
 
 onMounted(async () => {
@@ -129,6 +131,12 @@ onMounted(async () => {
     }
 });
 
+watch(() => props.changeAvatar, (newValue) => {
+    console.log(newValue);
+    if (newValue === 1) {
+        avatarurl.value = window.localStorage.getItem('avatar');
+    }
+});
 
 
 

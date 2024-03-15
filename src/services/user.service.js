@@ -47,6 +47,18 @@ class UserService {
         })
     }
 
+    async putAvatar(avatar) {
+        return axios.put('http://localhost:5075/api/account/avatar', avatar, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization : 'Bearer ' + window.localStorage.getItem('token')
+            }
+        })
+        .then((res)=>{
+            return res.data;
+        });
+    }
+
     async updateInterestedList(id, list, introduction) {
         axios.put('http://localhost:5075/api/account/' + id + '/info', {
             hobbies: list,
@@ -101,6 +113,18 @@ class UserService {
             .then((response) => {
                 return response.data;
             })
+    }
+
+    async updateUserInfor(infor){
+        return axios.put('http://localhost:5075/api/account/infor',infor,{
+            headers: {
+                Authorization : 'Bearer ' + window.localStorage.getItem('token')
+            }
+    }).then((res)=>{
+        return res.data;
+    }).catch((err)=>{
+        console.log(err);
+    })
     }
 }
 
