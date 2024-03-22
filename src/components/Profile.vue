@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref,onUnmounted } from "vue";
 import UserService from "@/services/user.service";
 import Header from "./Header.vue";
 
@@ -10,6 +10,7 @@ const address = ref('');
 const introduction = ref('');
 const load = ref(false);
 const changeAvatar = ref(0);
+const avatatUrl = ref('');
 
 
 onMounted( async ()=>{
@@ -20,12 +21,19 @@ onMounted( async ()=>{
     introduction.value = user.value.introduction;
 })
 
+onUnmounted(() => {
+    URL.revokeObjectURL(avatatUrl.value);
+})
+
 function getAvatar() {
     return window.localStorage.getItem('avatar');
 }
 
 function handleImage(e) {
-    document.getElementById("avatar1").setAttribute("src", URL.createObjectURL(e.target.files[0]));
+    URL.revokeObjectURL(avatatUrl.value);
+    const url = URL.createObjectURL(e.target.files[0]);
+    avatatUrl.value = url;
+    document.getElementById("avatar1").setAttribute("src", url);
 }
 
 
