@@ -10,7 +10,7 @@ const id = ref('');
 const route = useRoute();
 const load = ref(false);
 const fileEmpty = ref(false);
-const interestedList = [{"id":1,"name":'Sport'},{"id":2,"name":'Music'},{"id":3,"name":'Movie'},{"id":4,"name":'Game'},{"id":5,"name":'Reading'},{"id":6,"name":'Travel'},{"id":7,"name":'Cooking'},{"id":8,"name":'Photography'},{"id":9,"name":'Art'},{"id":10,"name":'Fashion'},{"id":11,"name":'Technology'},{"id":12,"name":'Science'},{"id":13,"name":'Education'},{"id":14,"name":'Health'},{"id":15,"name":'Business'}];
+const interestedList = [{ "id": 1, "name": 'Sport' }, { "id": 2, "name": 'Music' }, { "id": 3, "name": 'Movie' }, { "id": 4, "name": 'Game' }, { "id": 5, "name": 'Reading' }, { "id": 6, "name": 'Travel' }, { "id": 7, "name": 'Cooking' }, { "id": 8, "name": 'Photography' }, { "id": 9, "name": 'Art' }, { "id": 10, "name": 'Fashion' }, { "id": 11, "name": 'Technology' }, { "id": 12, "name": 'Science' }, { "id": 13, "name": 'Education' }, { "id": 14, "name": 'Health' }, { "id": 15, "name": 'Business' }];
 const list = [];
 onMounted(() => {
     id.value = route.params.id;
@@ -61,8 +61,8 @@ function uploadAvatar() {
     formData.append('file', files[0]);
     load.value = true;
     getInterestedList();
-    UserService.updateInterestedList(id.value,getInterestedList(), introduction.value)
-    UserService.postAvatar(id.value,formData).then(response => {
+    UserService.updateInterestedList(id.value, getInterestedList(), introduction.value)
+    UserService.postAvatar(id.value, formData).then(response => {
         window.localStorage.setItem('token', response.data.token);
         window.localStorage.setItem("refreshtoken", response.data.refreshtoken);
         router.push({
@@ -99,7 +99,9 @@ function uploadAvatar() {
             <div class="flex flex-col space-y-5 items-center w-80">
                 <h1 class="text-2xl font-bold">Upload your avatar</h1>
                 <div>
-                    <img id="avatar" class="w-80 h-80 object-cover " :class="{'border-spacing-1 border-2 border-red-600': fileEmpty}" :src="getImage()" alt="avatar">
+                    <img id="avatar" class="w-80 h-80 object-cover "
+                        :class="{ 'border-spacing-1 border-2 border-red-600': fileEmpty }" :src="getImage()"
+                        alt="avatar">
                 </div>
                 <div v-if="fileEmpty" class="font-bold text-red-600">Please upload your avatar</div>
                 <div class="flex space-x-3">

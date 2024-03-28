@@ -64,7 +64,7 @@ async function updateMessages(chatId, message) {
     reArrangeMessages(index, (item) => {
         item.lastmessage = "You: " + message;
     });
-    
+
 
 }
 
@@ -74,7 +74,7 @@ async function getUserAvatar(id) {
 
 }
 
-function reArrangeMessages(index,callback) {
+function reArrangeMessages(index, callback) {
     const item = messages.value[index];
     for (let i = index; i > 0; i--) {
         messages.value[i] = messages.value[i - 1];
@@ -102,7 +102,7 @@ function reArrangeMessages(index,callback) {
                 <AnimatedPlaceholder v-if="!msg.avatarurl" height="15px" width="130px" border-radius="20px" />
                 <div class="inline w-full last-message">
                     <div class="text-xs text-gray-400 ">{{
-                        msg.lastmessage }}</div>
+            msg.lastmessage }}</div>
                 </div>
             </div>
         </div>
